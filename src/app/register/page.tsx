@@ -160,9 +160,9 @@ function RegisterPage() {
             </p>
           </div>
         </div>
+      </div>
 
         {/* Footer */}
-      </div>
         <p className="text-center text-sm text-gray-500">
           By creating an account, you agree to our{" "}
           <a href="#" className="text-blue-600 hover:underline">Terms of Service</a>

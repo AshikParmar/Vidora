@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
                     return {
                         id: user._id.toString(),
                         email: user.email,
+                        username: user.username,
                     }
 
                 } catch (error) {
@@ -52,14 +53,16 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id
+                token.id = user.id;
+                token.username = user.username;
             }
             return token
         },
 
         async session({ session, token }) {
             if (session.user) {
-                session.user.id = token.id as string
+                session.user.id = token.id as string;
+                session.user.username = token.username;
             }
             return session
         }

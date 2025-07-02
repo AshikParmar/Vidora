@@ -8,7 +8,7 @@ export async function GET() {
          publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY as string,
      })
  
-     return Response.json({ authenticationParameters, publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY })
+     return Response.json({ ...authenticationParameters, publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY })
    } catch (error) {
         console.error(error);  
         return Response.json({
