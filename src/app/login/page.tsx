@@ -101,11 +101,22 @@ function LoginPage() {
             </button>
           </form>
 
+          <div className="mt-6 flex items-center justify-center">
+            <button
+              onClick={() => signIn("google", { callbackUrl: "/" })}
+              className="w-full bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 gap-4 rounded-lg flex items-center justify-center shadow hover:shadow-md transition"
+            >
+              <img src="https://www.svgrepo.com/show/380993/google-logo-search-new.svg" alt="Google logo" width={28} height={28} />
+              Sign in with Google
+            </button>
+          </div>
+
+
           {/* Register Link */}
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}
-              <button 
+              <button
                 onClick={() => router.push("/register")}
                 className="text-blue-600 hover:text-blue-700 font-medium hover:underline transition duration-200"
               >
@@ -116,13 +127,13 @@ function LoginPage() {
         </div>
       </div>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-500">
-          By signing in, you agree to our{" "}
-          <a href="#" className="text-blue-600 hover:underline">Terms of Service</a>
-          {" "}and{" "}
-          <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
-        </p>
+      {/* Footer */}
+      <p className="text-center text-sm text-gray-500">
+        By signing in, you agree to our{" "}
+        <a href="#" className="text-blue-600 hover:underline">Terms of Service</a>
+        {" "}and{" "}
+        <a href="#" className="text-blue-600 hover:underline">Privacy Policy</a>
+      </p>
     </div>
   );
 }

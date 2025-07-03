@@ -64,10 +64,10 @@ export default function Header() {
                   className="flex items-center space-x-2 bg-gray-50 hover:bg-gray-100 rounded-full px-4 py-2 transition-colors duration-200"
                 >
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                    {session.user?.email?.charAt(0).toUpperCase()}
+                    {session.user?.username?.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-gray-700 font-medium">
-                    {session.user?.email?.split("@")[0]}
+                    {session.user?.username}
                   </span>
                   <svg className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

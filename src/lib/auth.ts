@@ -51,12 +51,31 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     callbacks: {
+        async signIn({ user, account, profile }) {
+            if (account?.provider === "google") {
+                await DBConnect();
+
+                let existingUser = await User.findOne({ email: user.email });
+                if (!existingUser) {
+                    existingUser = await User.create({
+                        email: user.email,
+                        username: user.name?.replace(/\s/g, "").toLowerCase(),
+                        password: user.email,
+                    });
+                }
+                user.id = existingUser._id.toString();
+                user.username = existingUser.username;
+            }
+
+            return true;
+        },
+
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
                 token.username = user.username;
             }
-            return token
+            return token;
         },
 
         async session({ session, token }) {
@@ -68,7 +87,7 @@ export const authOptions: NextAuthOptions = {
         }
 
     },
-    pages:{
+    pages: {
         signIn: "/login",
         error: "/api/auth/signin",
     },

@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
     try {
         await DBConnect();
-        const videos = await Video.find({}).sort({ createdAt: -1 }).lean()
+        const videos = await Video.find().populate("uploadedBy").sort({ createdAt: -1 }).lean()
 
         if (!videos || videos.length < 1) {
             return NextResponse.json({
