@@ -1,5 +1,5 @@
 import mongoose, { model, models, Schema } from "mongoose";
-import { IUser } from "./User";
+import { UserState } from "@/types/types";
 
 export const VIDEO_DIMENSIONS = {
     width: 1080,
@@ -8,7 +8,7 @@ export const VIDEO_DIMENSIONS = {
 
 export interface IVideo {
     _id?: mongoose.Types.ObjectId | string;
-    uploadedBy: mongoose.Types.ObjectId | IUser | string;
+    uploadedBy: mongoose.Types.ObjectId | UserState | string;
     title: string;
     description: string;
     videoUrl: string;

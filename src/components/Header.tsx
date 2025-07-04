@@ -2,12 +2,26 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProfile } from "@/hooks/useUser";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/store/slices/userSlice";
+import { RootState } from "@/store";
+import { UserState } from "@/types/types";
 
 export default function Header() {
   const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+  const { data } = useProfile(session?.user?.id as string);
+
+useEffect(() => {
+    if (data) {
+        dispatch(setUser(data as UserState));
+    }
+}, [data, dispatch]);
 
   const handleSignOut = async () => {
     try {
@@ -17,9 +31,9 @@ export default function Header() {
   };
 
   const navLinks = [
-    { href: "/", label: "Home"},
+    { href: "/", label: "Home" },
     { href: "/upload", label: "Upload", protected: true },
-    { href: "/about", label: "About"},
+    { href: "/about", label: "About" },
   ];
 
   return (
@@ -41,7 +55,7 @@ export default function Header() {
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => {
               if (link.protected && !session) return null;
-              
+
               return (
                 <Link
                   key={link.href}
@@ -61,13 +75,13 @@ export default function Header() {
               <div className="relative">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                  className="flex items-center space-x-2 bg-gray-50 hover:bg-gray-100 rounded-full px-4 py-2 transition-colors duration-200"
+                  className="flex items-center space-x-2 bg-white hover:bg-gray-100 rounded-full px-4 py-2 transition-colors duration-200"
                 >
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                    {session.user?.username?.charAt(0).toUpperCase()}
+                    {user?.username?.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-gray-700 font-medium">
-                    {session.user?.username}
+                    {user?.username}
                   </span>
                   <svg className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isUserMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -78,10 +92,10 @@ export default function Header() {
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50">
                     <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-medium text-gray-900">{session.user?.username}</p>
-                      <p className="text-xs text-gray-500">{session.user?.email}</p>
+                      <p className="text-sm font-medium text-gray-900">{user?.username}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
                     </div>
-                    
+
                     <div className="py-1">
                       <Link
                         href="/profile"
@@ -93,7 +107,7 @@ export default function Header() {
                         <span className="mr-3">👤</span>
                         Profile
                       </Link>
-                      
+
                       <Link
                         href="/settings"
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
@@ -103,7 +117,7 @@ export default function Header() {
                         Settings
                       </Link>
                     </div>
-                    
+
                     <div className="border-t border-gray-100 py-1">
                       <button
                         onClick={() => {
@@ -154,7 +168,7 @@ export default function Header() {
             <nav className="space-y-2">
               {navLinks.map((link) => {
                 if (link.protected && !session) return null;
-                
+
                 return (
                   <Link
                     key={link.href}
@@ -174,14 +188,14 @@ export default function Header() {
                 <div className="space-y-2">
                   <div className="flex items-center space-x-3 px-4 py-2">
                     <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-medium">
-                      {session.user?.username}
+                      {user?.username}
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">{session.user?.username}</p>
-                      <p className="text-sm text-gray-500">{session.user?.email}</p>
+                      <p className="font-medium text-gray-900">{user?.username}</p>
+                      <p className="text-sm text-gray-500">{user?.email}</p>
                     </div>
                   </div>
-                  
+
                   <Link
                     href="/profile"
                     className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
@@ -190,7 +204,7 @@ export default function Header() {
                     <span>👤</span>
                     <span className="font-medium">Profile</span>
                   </Link>
-                  
+
                   <button
                     onClick={() => {
                       handleSignOut();

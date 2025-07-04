@@ -14,7 +14,7 @@ const initialState: VideoState = {
 };
 
 const videoSlice = createSlice({
-  name: 'video',
+  name: 'videos',
   initialState,
   reducers: {
     setVideos: (state, action: PayloadAction<IVideo[]>) => {

@@ -1,29 +1,40 @@
 import Link from "next/link";
 import { IVideo } from "@/models/Video";
 import Image from "next/image";
-import { IUser } from "@/models/User";
 import { Avatar } from "antd";
+import { IKVideo } from "imagekitio-next";
+import { UserState } from "@/types/types";
 
 export default function VideoComponent({ video }: { video: IVideo }) {
-  const uploader = video.uploadedBy as IUser;
+  const uploader = video.uploadedBy as UserState;
 
   return (
     <div className="card bg-white rounded-xl shadow hover:shadow-lg transition-all duration-300">
       {/* Video Preview */}
       <figure className="relative px-4 pt-4">
-        <Link href={`/videos/${video._id}`} className="relative group w-full">
-          <div className="rounded-xl overflow-hidden border border-amber-500 relative w-full">
-            <video controls className="w-full h-auto rounded">
-              <source src={video.videoUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+         <Link href={`/videos/${video._id}`} className="relative group w-full">
+          <div
+            className="rounded-xl overflow-hidden relative w-full"
+            style={{ aspectRatio: "16/9" }}
+          >
+            <IKVideo
+              urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}
+              path={video.videoUrl.replace("https://ik.imagekit.io/Ashik0512/", "")}
+              // transformation={[
+              //   {
+              //     height: "1080",
+              //     width: "1920",
+              //   },
+              // ]}
+              controls={video.controls}
+              className="w-full h-full object-cover"
+            />
           </div>
         </Link>
       </figure>
 
-      {/* Video Meta */}
       <div className="card-body px-4 pb-4 pt-3 flex gap-3">
-        {/* Uploader Avatar */}
+
         <Link href={`/profile/${uploader?._id}`}>
           {uploader?.avatar ?
             (<Image
@@ -41,7 +52,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
 
         </Link>
 
-        {/* Video Info */}
+     
         <div className="flex-1">
           <Link href={`/videos/${video._id}`}>
             <h2 className="text-base font-semibold text-gray-900 hover:opacity-80">

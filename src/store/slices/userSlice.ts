@@ -1,7 +1,5 @@
-import { IUser } from '@/models/User';
+import { UserState } from '@/types/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export type UserState = Omit<IUser, "password">;
 
 const initialState: UserState = {
     username: '',
@@ -17,7 +15,12 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser(state, action: PayloadAction<UserState>) {
-            state = action.payload;
+            state.username = action.payload.username;
+            state.email = action.payload.email;
+            state.avatar = action.payload.avatar;
+            state.createdAt = action.payload.createdAt;
+            state.updatedAt = action.payload.updatedAt;
+            state._id = action.payload._id;
         },
         clearUser(state) {
             state = initialState;

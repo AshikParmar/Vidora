@@ -64,7 +64,6 @@ export const authOptions: NextAuthOptions = {
                     });
                 }
                 user.id = existingUser._id.toString();
-                user.username = existingUser.username;
             }
 
             return true;
@@ -73,7 +72,6 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
-                token.username = user.username;
             }
             return token;
         },
@@ -81,7 +79,6 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             if (session.user) {
                 session.user.id = token.id as string;
-                session.user.username = token.username;
             }
             return session
         }

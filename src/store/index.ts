@@ -5,7 +5,7 @@ import videoReducer from './slices/videoSlice';
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    video: videoReducer,
+    videos: videoReducer,
   },
 });
 

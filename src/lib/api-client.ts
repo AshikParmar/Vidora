@@ -1,4 +1,6 @@
+
 import { IVideo } from "@/models/Video";
+import { UserState, userVideos } from "@/types/types";
 
 export type VideoFormData = Omit<IVideo, "_id">;
 
@@ -42,6 +44,14 @@ class ApiClient {
       method: "POST",
       body: videoData,
     });
+  }
+
+  async getProfile(id: string): Promise<{ user: UserState }> {
+    return this.fetch<{ user: UserState }>(`/user/${id}`);
+  }
+
+  async getUserVideos(userId: string): Promise<{ videos: userVideos[] }> {
+    return this.fetch<{ videos: userVideos[] }>(`/videos/user/${userId}`);
   }
 }
 
