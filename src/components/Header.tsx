@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/store/slices/userSlice";
 import { RootState } from "@/store";
 import { UserState } from "@/types/types";
+import Image from "next/image";
 
 export default function Header() {
   const { data: session } = useSession();
@@ -37,7 +38,7 @@ useEffect(() => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-99 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -77,6 +78,14 @@ useEffect(() => {
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center space-x-2 bg-white hover:bg-gray-100 rounded-full px-4 py-2 transition-colors duration-200"
                 >
+                  {/* <div className="rounded-full flex items-center justify-center text-white overflow-hidden w-8 h-8">
+                    <Image
+                      src={user?.avatar}
+                      alt={user?.username}
+                      width={40}
+                      height={40}
+                    />
+                  </div> */}
                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                     {user?.username?.charAt(0).toUpperCase()}
                   </div>
@@ -98,7 +107,7 @@ useEffect(() => {
 
                     <div className="py-1">
                       <Link
-                        href="/profile"
+                        href={`/profile/${user?._id}`}
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
                         onClick={() => {
                           setIsUserMenuOpen(false);
@@ -184,12 +193,17 @@ useEffect(() => {
 
             {/* Mobile User Section */}
             <div className="border-t border-gray-200 mt-4 pt-4">
-              {session ? (
+              {session && user ? (
                 <div className="space-y-2">
                   <div className="flex items-center space-x-3 px-4 py-2">
-                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-medium">
-                      {user?.username}
-                    </div>
+                    <div className="rounded-full flex items-center justify-center text-white overflow-hidden w-10 h-10">
+                    <Image
+                      src={user?.avatar}
+                      alt={user?.username}
+                      width={40}
+                      height={40}
+                    />
+                  </div>
                     <div>
                       <p className="font-medium text-gray-900">{user?.username}</p>
                       <p className="text-sm text-gray-500">{user?.email}</p>
@@ -197,13 +211,22 @@ useEffect(() => {
                   </div>
 
                   <Link
-                    href="/profile"
+                    href={`/profile/${user?._id}`}
                     className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <span>👤</span>
                     <span className="font-medium">Profile</span>
                   </Link>
+
+                   <Link
+                      href="/settings"
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                      >
+                        <span className="mr-3">⚙️</span>
+                        Settings
+                      </Link>
 
                   <button
                     onClick={() => {

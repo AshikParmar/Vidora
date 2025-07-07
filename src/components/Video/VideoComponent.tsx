@@ -9,12 +9,12 @@ export default function VideoComponent({ video }: { video: IVideo }) {
   const uploader = video.uploadedBy as UserState;
 
   return (
-    <div className="card bg-white rounded-xl shadow hover:shadow-lg transition-all duration-300">
+    <div className="card bg-white rounded-xl shadow hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
       {/* Video Preview */}
-      <figure className="relative px-4 pt-4">
+      <figure className="relative p-4">
          <Link href={`/videos/${video._id}`} className="relative group w-full">
           <div
-            className="rounded-xl overflow-hidden relative w-full"
+            className="rounded-lg overflow-hidden relative w-full"
             style={{ aspectRatio: "16/9" }}
           >
             <IKVideo
@@ -22,8 +22,8 @@ export default function VideoComponent({ video }: { video: IVideo }) {
               path={video.videoUrl.replace("https://ik.imagekit.io/Ashik0512/", "")}
               // transformation={[
               //   {
-              //     height: "1080",
-              //     width: "1920",
+              //     height: "360",
+              //     width: "640  ",
               //   },
               // ]}
               controls={video.controls}
@@ -33,7 +33,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
         </Link>
       </figure>
 
-      <div className="card-body px-4 pb-4 pt-3 flex gap-3">
+      <div className="card-body px-4  pb-4 flex gap-3">
 
         <Link href={`/profile/${uploader?._id}`}>
           {uploader?.avatar ?

@@ -82,11 +82,33 @@ export default function UploadPage() {
                 Video File
               </label>
               <div className="space-y-4">
-                <FileUpload
-                  onSuccess={handleUploadSuccess}
-                  onProgress={handleUploadProgress}
-                  fileType="video"
-                />
+
+                {videoUrl ? (
+                  <div className="relative w-80 overflow-hidden">
+                 
+                    <video
+                      src={videoUrl}
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+
+                    {/* Cancel Button */}
+                    <button
+                      type="button"
+                      onClick={() => setVideoUrl("")}
+                      className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700 transition-all"
+                    >
+                      Cancel
+                    </button>
+
+                    <p className="text-sm text-green-600 mt-2">✅ Video uploaded successfully!</p>
+                  </div>
+                ) : (
+                  <FileUpload
+                    onSuccess={handleUploadSuccess}
+                    onProgress={handleUploadProgress}
+                    fileType="video"
+                  />
+                )}
 
 
                 {/* Upload Progress */}
@@ -97,13 +119,6 @@ export default function UploadPage() {
                       style={{ width: `${uploadProgress}%` }}
                     ></div>
                     <p className="text-sm text-gray-600 mt-2">{uploadProgress}% uploaded</p>
-                  </div>
-                )}
-
-                {/* Success Message */}
-                {videoUrl && !isUploading && (
-                  <div className="text-green-600 font-medium mt-4">
-                    ✅ Video uploaded successfully!
                   </div>
                 )}
               </div>

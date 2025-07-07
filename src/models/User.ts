@@ -3,11 +3,11 @@ import bcrypt from "bcryptjs";
 
 
 export interface IUser {
-    _id?: mongoose.Types.ObjectId;
+    _id?: mongoose.Types.ObjectId | string;
     username: string;
     email: string;
     password: string;
-    avatar?: string;
+    avatar: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -25,7 +25,11 @@ const userSchema = new Schema<IUser>({
     password:{
         type: String,
         required: true,
-    }
+    },
+    avatar:{
+        type: String,
+        default: "https://ik.imagekit.io/Ashik0512/images/avatar01?updatedAt=1751621420636",
+    },
 },{
     timestamps: true,
 })

@@ -1,7 +1,7 @@
 // hooks/useVideos.ts
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client'; 
-import { UserState } from '@/types/types';
+import { UserState, userVideos } from '@/types/types';
 
 const fetchProfile = async (id: string): Promise<UserState> => {
   const res = await apiClient.getProfile(id); 
@@ -18,12 +18,19 @@ export const useProfile = (id: string) =>
     queryKey: ['profile', id],
     queryFn: () => fetchProfile(id),
     staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!id,
   });
 
 
-export const useUserVideos = (userId: string) =>
-  useQuery({
+
+export const useUserVideos = (
+  userId: string,
+  options?: UseQueryOptions<userVideos[], Error>
+) => {
+  return useQuery<userVideos[], Error>({
     queryKey: ['userVideos', userId],
     queryFn: () => fetchUserVideos(userId),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
   });
+};

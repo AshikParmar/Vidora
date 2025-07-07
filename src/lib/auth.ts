@@ -61,6 +61,7 @@ export const authOptions: NextAuthOptions = {
                         email: user.email,
                         username: user.name?.replace(/\s/g, "").toLowerCase(),
                         password: user.email,
+                        avatar: user.image || "https://ik.imagekit.io/Ashik0512/images/avatar01?updatedAt=1751621420636"
                     });
                 }
                 user.id = existingUser._id.toString();
