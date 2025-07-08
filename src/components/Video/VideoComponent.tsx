@@ -12,7 +12,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
     <div className="card bg-white rounded-xl shadow hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
       {/* Video Preview */}
       <figure className="relative p-4">
-         <Link href={`/videos/${video._id}`} className="relative group w-full">
+         <Link href={`/video/${video._id}`} className="relative group w-full">
           <div
             className="rounded-lg overflow-hidden relative w-full"
             style={{ aspectRatio: "16/9" }}
@@ -54,7 +54,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
 
      
         <div className="flex-1">
-          <Link href={`/videos/${video._id}`}>
+          <Link href={`/video/${video._id}`}>
             <h2 className="text-base font-semibold text-gray-900 hover:opacity-80">
               {video.title}
             </h2>

@@ -53,6 +53,14 @@ class ApiClient {
   async getUserVideos(userId: string): Promise<{ videos: userVideos[] }> {
     return this.fetch<{ videos: userVideos[] }>(`/videos/user/${userId}`);
   }
+
+  async getVideoById(id: string): Promise<{ video: IVideo }> {
+    return this.fetch<{ video: IVideo }>(`/videos/${id}`);
+  }
+
+  async getRelatedVideos(id: string): Promise<{ relatedVideos: IVideo[] }> {
+    return this.fetch<{ relatedVideos: IVideo[] }>(`/videos/related/${id}`);
+  }
 }
 
 export const apiClient = new ApiClient();

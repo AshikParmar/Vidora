@@ -2,6 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IVideo } from '@/models/Video';
 
 interface VideoState {
+  selectedVideo?: IVideo | null;
+  nextVideos?: IVideo[];
   videos: IVideo[];
   loading: boolean;
   error: string | null;
@@ -38,6 +40,14 @@ const videoSlice = createSlice({
       state.videos = [];
       state.loading = false;
       state.error = null;
+    },
+
+    setSelectedVideo: (state, action: PayloadAction<IVideo | null>) => {
+      state.selectedVideo = action.payload;
+    },
+    setNextVideos: (state, action: PayloadAction<IVideo[]>) => {
+      console.log(action.payload);
+      state.nextVideos = action.payload;  
     }
   }
 });
@@ -48,7 +58,9 @@ export const {
   removeVideo,
   setVideoLoading,
   setVideoError,
-  clearVideos
+  clearVideos,
+  setSelectedVideo,
+  setNextVideos
 } = videoSlice.actions;
 
 export default videoSlice.reducer;

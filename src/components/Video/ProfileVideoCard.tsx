@@ -8,7 +8,7 @@ export default function ProfileVideoCard({ video }: { video: userVideos }) {
   return (
     <div className="card bg-white rounded-xl shadow hover:shadow-md transition-all duration-300 overflow-hidden">
       {/* Video */}
-      <Link href={`/videos/${video._id}`}>
+      <Link href={`/video/${video._id}`}>
         <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
           <IKVideo
             urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}
@@ -21,7 +21,7 @@ export default function ProfileVideoCard({ video }: { video: userVideos }) {
 
       {/* Content */}
       <div className="p-4 space-y-1">
-        <Link href={`/videos/${video._id}`}>
+        <Link href={`/video/${video._id}`}>
           <h3 className="text-sm font-semibold text-gray-900 hover:underline line-clamp-1">
             {video.title}
           </h3>

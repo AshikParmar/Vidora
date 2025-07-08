@@ -8,9 +8,36 @@ const fetchVideos = async (): Promise<IVideo[]> => {
   return res.videos;
 };
 
+const fetchVideoById = async (id: string): Promise<IVideo> => {
+  const res = await apiClient.getVideoById(id);
+  return res.video;
+};
+
+const fetchRelatedVideos = async (id: string): Promise<IVideo[]> => {
+  const res = await apiClient.getRelatedVideos(id);
+  return res.relatedVideos;
+};
+
 export const useVideos = () =>
   useQuery<IVideo[]>({
     queryKey: ['videos'],
     queryFn: fetchVideos,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
+
+
+  export const useSingleVideo = (id: string) => {
+  return useQuery({
+    queryKey: ["video", id],
+    queryFn: () => fetchVideoById(id),
+    enabled: !!id,
+  });
+};
+
+export const useRelatedVideos = (id: string) => {
+  return useQuery({
+    queryKey: ["relatedVideos", id],
+    queryFn: () => fetchRelatedVideos(id),
+    enabled: !!id,
+  });
+};

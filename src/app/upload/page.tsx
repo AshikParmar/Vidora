@@ -49,7 +49,7 @@ export default function UploadPage() {
         uploadedBy: session?.user?.id as string,
       });
 
-      router.push("/videos");
+      router.push("/profile/" + session?.user?.id);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Failed to save video");
     } finally {
@@ -59,7 +59,7 @@ export default function UploadPage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen text-black bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}

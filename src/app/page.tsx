@@ -1,9 +1,24 @@
 "use client"
 
 import VideoFeed from "@/components/Video/VideoFeed";
+import { useVideos } from "@/hooks/useVideos";
+import { RootState } from "@/store";
+import { setVideos } from "@/store/slices/videoSlice";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
+  const videos = useSelector((state: RootState) => state.videos?.videos);
+  const dispatch = useDispatch();
+
+  const { data, isLoading, isError } = useVideos();
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setVideos(data));
+    }
+  }, [data]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
@@ -97,7 +112,7 @@ export default function Home() {
           
           {/* Video Feed */}
           <div className="rounded-2xl overflow-hidden">
-            <VideoFeed />
+            <VideoFeed videos={videos} isLoading={isLoading}/>
           </div>
         </div>
       </div>
