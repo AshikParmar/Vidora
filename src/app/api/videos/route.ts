@@ -6,11 +6,27 @@ import { NextRequest, NextResponse } from "next/server";
 
 
 export async function GET(request: NextRequest) {
-    try {
-        await DBConnect();
-        const videos = await Video.find().populate("uploadedBy", "-password").sort({ createdAt: -1 }).lean()
+  const search = request.nextUrl.searchParams.get("search") || "";
 
-        if (!videos || videos.length < 1) {
+  try {
+    await DBConnect();
+
+    // If a search term is provided, filter by title or description
+    const videos = await Video.find(
+      search
+        ? {
+            $or: [
+              { title: { $regex: search, $options: "i" } },
+              { description: { $regex: search, $options: "i" } },
+            ],
+          }
+        : {}
+    ).populate("uploadedBy", "-password")
+      .limit(20)
+      .sort({ createdAt: -1 });
+
+      
+     if (!videos || videos.length < 1) {
             return NextResponse.json({
                 videos: [],
             }, { status: 200 })
@@ -22,11 +38,12 @@ export async function GET(request: NextRequest) {
 
     } catch (error) {
         console.error("Failed to Fetch Videos ",error)
-        NextResponse.json({
+        return NextResponse.json({
             error: "Failed to fetch videos"
         }, { status: 500 })
     }
 }
+
 
 export async function POST(request: NextRequest) {
     try {

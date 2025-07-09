@@ -1,18 +1,21 @@
 "use client"
 
 import VideoFeed from "@/components/Video/VideoFeed";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useVideos } from "@/hooks/useVideos";
 import { RootState } from "@/store";
 import { setVideos } from "@/store/slices/videoSlice";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
   const videos = useSelector((state: RootState) => state.videos?.videos);
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 1000);
 
-  const { data, isLoading, isError } = useVideos();
+  const { data, isLoading, isError } = useVideos(debouncedSearch);
 
   useEffect(() => {
     if (data) {
@@ -67,6 +70,8 @@ export default function Home() {
               </div>
               <input
                 type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search videos, creators, or topics..."
                 className="w-full pl-10 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 hover:bg-white/20"
               />

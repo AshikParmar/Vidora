@@ -19,7 +19,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
           >
             <IKVideo
               urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}
-              path={video.videoUrl.replace("https://ik.imagekit.io/Ashik0512/", "")}
+              path={video.videoUrl.replace("https://ik.imagekit.io/", "")}
               // transformation={[
               //   {
               //     height: "360",

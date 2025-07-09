@@ -7,11 +7,12 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { userId: string } }
 ) {
+  const { userId } = await params;
   await DBConnect();
 
   try {
     const videos = await Video.aggregate([
-      { $match: { uploadedBy: new mongoose.Types.ObjectId(params.userId) } },
+      { $match: { uploadedBy: new mongoose.Types.ObjectId(userId) } },
       {
         $project: {
           _id: 1,

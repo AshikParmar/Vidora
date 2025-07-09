@@ -47,7 +47,7 @@ const FileUpload = ({ onSuccess, onProgress, fileType = "video" }: FileUploadPro
 
       const res = await upload({
         file,
-        fileName: file.name,
+        fileName: file.name + `-${Date.now()}`,
         publicKey: process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
         folder: "/vidora",
         signature: auth.signature,

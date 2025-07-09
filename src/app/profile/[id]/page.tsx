@@ -1,18 +1,31 @@
 "use client";
 
 import ProfileVideoCard from '@/components/Video/ProfileVideoCard';
+import ManageProfile from '@/components/Profile/ManageProfile';
 import { useProfile, useUserVideos } from '@/hooks/useUser';
-import React, { use } from 'react';
+import { useSession } from 'next-auth/react';
+import React, { use, useState } from 'react';
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
+  const { data: session } = useSession();
+  const [showMenu, setShowMenu] = useState(false);
+  const [showManageProfile, setShowManageProfile] = useState(false);
 
-  const { data: user, isLoading, isError } = useProfile(id);
+  const { data: profileUser, isLoading, isError } = useProfile(id);
   const {
     data: videos,
     isLoading: isLoadingVideos,
     isError: isErrorVideos
-  } = useUserVideos(user?._id as string);
+  } = useUserVideos(profileUser?._id as string);
+
+  const handleResetPassword = () => {
+    console.log('Reset password clicked');
+
+    setShowMenu(false);
+  };
+
+  const isOwnProfile = session?.user?.id === id;
 
   if (isLoading) {
     return (
@@ -48,7 +61,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
         <div className="h-64 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-          
+
           {/* Animated background elements */}
           <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
           <div className="absolute top-20 right-20 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-300"></div>
@@ -62,12 +75,56 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="relative -mt-20 mb-6">
               <div className="inline-block">
                 <img
-                  src={user?.avatar}
-                  alt={user?.username}
+                  src={profileUser?.avatar || '/avatar.png'}
+                  alt={profileUser?.username}
                   className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-2xl hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow-lg"></div>
               </div>
+              {/* Three Dot Menu - Only show for own profile */}
+              {isOwnProfile && (
+                <div className="absolute w-fit -bottom-2 -right-2">
+                  <button
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="w-8 h-8 bg-green-500 cursor-pointer rounded-full border-4 border-white shadow-lg hover:bg-green-600 transition-colors duration-200 flex items-center justify-center"
+                  >
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {showMenu && (
+                    <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+                      <button
+                        onClick={() => {
+                          setShowManageProfile(true);
+                          setShowMenu(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Manage Profile
+                      </button>
+                      <button
+                        onClick={handleResetPassword}
+                        className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                        Reset Password
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Online indicator for non-own profiles */}
+              {!isOwnProfile && (
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white shadow-lg"></div>
+              )}
             </div>
 
             {/* User Info */}
@@ -75,13 +132,13 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div className="space-y-3">
                   <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                    {user?.username}
+                    {profileUser?.username}
                   </h1>
                   <p className="text-gray-600 text-lg flex items-center gap-2">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
                     </svg>
-                    {user?.email}
+                    {profileUser?.email}
                   </p>
                 </div>
 
@@ -163,6 +220,22 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           </>
         )}
       </div>
+
+      {/* Manage Profile Modal */}
+      {profileUser && (
+        <ManageProfile
+          isOpen={showManageProfile}
+          onClose={() => setShowManageProfile(false)}
+        />
+      )}
+
+      {/* Click outside to close menu */}
+      {showMenu && (
+        <div
+          className="fixed inset-0 z-5"
+          onClick={() => setShowMenu(false)}
+        ></div>
+      )}
 
       <style jsx>{`
         @keyframes fade-in {

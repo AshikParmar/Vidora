@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client'; 
 import { IVideo } from '@/models/Video';
 
-const fetchVideos = async (): Promise<IVideo[]> => {
-  const res = await apiClient.getVideos(); 
+const fetchVideos = async (search = ""): Promise<IVideo[]> => {
+  const res = await apiClient.getVideos(search);
   return res.videos;
 };
 
@@ -18,11 +18,12 @@ const fetchRelatedVideos = async (id: string): Promise<IVideo[]> => {
   return res.relatedVideos;
 };
 
-export const useVideos = () =>
+export const useVideos = (search: string) =>
   useQuery<IVideo[]>({
-    queryKey: ['videos'],
-    queryFn: fetchVideos,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    queryKey: ['videos', search],
+    queryFn: () => fetchVideos(search),
+    staleTime: 1000 * 60 * 5,
+    enabled: true,
   });
 
 

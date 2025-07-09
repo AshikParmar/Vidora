@@ -32,11 +32,12 @@ class ApiClient {
       throw new Error(await response.text());
     }
 
-    return response.json();
+    return await response.json();
   }
 
-  async getVideos(): Promise<{ videos: IVideo[] }> {
-    return this.fetch<{ videos: IVideo[] }>("/videos");
+  async getVideos(search = ""): Promise<{ videos: IVideo[] }> {
+    const query = search ? `?search=${encodeURIComponent(search)}` : "";
+    return this.fetch<{ videos: IVideo[] }>(`/videos${query}`);
   }
 
   async createVideo(videoData: VideoFormData) {
@@ -48,6 +49,13 @@ class ApiClient {
 
   async getProfile(id: string): Promise<{ user: UserState }> {
     return this.fetch<{ user: UserState }>(`/user/${id}`);
+  }
+
+  async updateProfile(id: string, profileData: Partial<UserState>): Promise<{ user: UserState }> {
+    return this.fetch(`/user/${id}`, {
+      method: "PUT",
+      body: profileData,
+    });
   }
 
   async getUserVideos(userId: string): Promise<{ videos: userVideos[] }> {
