@@ -11,6 +11,7 @@ export interface IVideo {
     uploadedBy: mongoose.Types.ObjectId | UserState | string;
     title: string;
     description: string;
+    tags: string[];
     videoUrl: string;
     thumbnailUrl?: string;
     controls?: boolean;
@@ -31,6 +32,10 @@ const videoSchema = new Schema<IVideo>({
     description: {
         type: String,
         required: true,
+    },
+    tags: {
+        type: [String],
+        default: [],
     },
     uploadedBy: {
         type: Schema.Types.ObjectId,

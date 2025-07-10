@@ -40,7 +40,11 @@ userSchema.pre("save", async function(next) {
         this.password = await bcrypt.hash(this.password, 8);
     }
     next()
-})
+});
+
+userSchema.methods.comparePassword = async function (newPassword: string): Promise<boolean> {
+  return await bcrypt.compare(newPassword, this.password);
+};
 
 const User = models?.User || model<IUser>("User", userSchema);
 

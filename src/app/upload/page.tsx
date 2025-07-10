@@ -11,6 +11,7 @@ export default function UploadPage() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [tags, setTags] = useState("")
   const [videoUrl, setVideoUrl] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -44,6 +45,7 @@ export default function UploadPage() {
       const response = await apiClient.createVideo({
         title,
         description,
+        tags: tags.split(",").map(tag => tag.trim().toLowerCase()),
         videoUrl,
         thumbnailUrl: "",
         uploadedBy: session?.user?.id as string,
@@ -135,6 +137,20 @@ export default function UploadPage() {
                 placeholder="Enter video title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder-gray-400"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                Tags *
+              </label>
+              <input
+                id="tags"
+                type="text"
+                placeholder="Enter video tags (comma separated)"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder-gray-400"
               />

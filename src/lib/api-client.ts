@@ -29,7 +29,12 @@ class ApiClient {
     });
 
     if (!response.ok) {
-      throw new Error(await response.text());
+      const message = await response.text();
+
+      throw {
+        status: response.status,
+        message,
+      };
     }
 
     return await response.json();
@@ -55,6 +60,16 @@ class ApiClient {
     return this.fetch(`/user/${id}`, {
       method: "PUT",
       body: profileData,
+    });
+  }
+
+  async resetPassword(
+    userId: string,
+    data: { currentPassword: string; newPassword: string }
+  ): Promise<void> {
+    return this.fetch(`/user/${userId}/reset-password`, {
+      method: "POST",
+      body: data,
     });
   }
 

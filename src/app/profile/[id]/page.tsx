@@ -5,12 +5,14 @@ import ManageProfile from '@/components/Profile/ManageProfile';
 import { useProfile, useUserVideos } from '@/hooks/useUser';
 import { useSession } from 'next-auth/react';
 import React, { use, useState } from 'react';
+import ResetPassword from '@/components/Profile/ResetPassword';
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params);
   const { data: session } = useSession();
   const [showMenu, setShowMenu] = useState(false);
   const [showManageProfile, setShowManageProfile] = useState(false);
+  const [showResetPassword, setShowResetPassword] = useState(false);
 
   const { data: profileUser, isLoading, isError } = useProfile(id);
   const {
@@ -18,12 +20,6 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     isLoading: isLoadingVideos,
     isError: isErrorVideos
   } = useUserVideos(profileUser?._id as string);
-
-  const handleResetPassword = () => {
-    console.log('Reset password clicked');
-
-    setShowMenu(false);
-  };
 
   const isOwnProfile = session?.user?.id === id;
 
@@ -108,7 +104,10 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
                         Manage Profile
                       </button>
                       <button
-                        onClick={handleResetPassword}
+                        onClick={() => {
+                          setShowResetPassword(true);
+                          setShowMenu(false);
+                        }}
                         className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center gap-2"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,10 +221,17 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
       </div>
 
       {/* Manage Profile Modal */}
-      {profileUser && (
+      {isOwnProfile && (
         <ManageProfile
           isOpen={showManageProfile}
           onClose={() => setShowManageProfile(false)}
+        />
+      )}
+
+      {isOwnProfile && (
+        <ResetPassword
+          isOpen={showResetPassword}
+          onClose={() => setShowResetPassword(false)}
         />
       )}
 
