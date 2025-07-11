@@ -7,24 +7,27 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const search = request.nextUrl.searchParams.get("search") || "";
+  const tag = request.nextUrl.searchParams.get("tag") || "";
 
   try {
     await DBConnect();
-
+    const filter: any = {};
     // If a search term is provided, filter by title or description
-    const videos = await Video.find(
-      search
-        ? {
-            $or: [
-              { title: { $regex: search, $options: "i" } },
-              { description: { $regex: search, $options: "i" } },
-            ],
-          }
-        : {}
-    ).populate("uploadedBy", "-password")
+     if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (tag) {
+      filter.tags = { $elemMatch: { $regex: tag, $options: "i" } };
+    }
+
+    const videos = await Video.find(filter)
+      .populate("uploadedBy", "-password")
       .limit(20)
       .sort({ createdAt: -1 });
-
       
      if (!videos || videos.length < 1) {
             return NextResponse.json({

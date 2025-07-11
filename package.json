@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@huggingface/inference": "^4.4.0",
     "@imagekit/next": "^2.1.2",
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.81.5",

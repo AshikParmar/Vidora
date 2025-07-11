@@ -1,4 +1,5 @@
 
+import { Tag } from "@/app/page";
 import { IVideo } from "@/models/Video";
 import { UserState, userVideos } from "@/types/types";
 
@@ -40,9 +41,10 @@ class ApiClient {
     return await response.json();
   }
 
-  async getVideos(search = ""): Promise<{ videos: IVideo[] }> {
-    const query = search ? `?search=${encodeURIComponent(search)}` : "";
-    return this.fetch<{ videos: IVideo[] }>(`/videos${query}`);
+  async getVideos(search = "", tag: Tag): Promise<{ videos: IVideo[] }> {
+    const query = search ? `search=${encodeURIComponent(search)}&` : "";
+    const tagQuery = tag ? `tag=${encodeURIComponent(tag)}` : "";
+    return this.fetch<{ videos: IVideo[] }>(`/videos?${query}${tagQuery}`);
   }
 
   async createVideo(videoData: VideoFormData) {
@@ -83,6 +85,17 @@ class ApiClient {
 
   async getRelatedVideos(id: string): Promise<{ relatedVideos: IVideo[] }> {
     return this.fetch<{ relatedVideos: IVideo[] }>(`/videos/related/${id}`);
+  }
+
+
+  async generateDescription(
+    title: string,
+    tags: string[]
+  ): Promise<{message: string}> {
+    return this.fetch<{message: string}>(`/generate`, {
+      method: "POST",
+      body: { title, tags },
+    });
   }
 }
 

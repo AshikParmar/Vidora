@@ -11,7 +11,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
   return (
     <div className="card bg-white rounded-xl shadow hover:shadow-2xl hover:scale-[1.02] transition-all duration-300">
       {/* Video Preview */}
-      <figure className="relative p-4">
+      <figure className="relative p-3">
          <Link href={`/video/${video._id}`} className="relative group w-full">
           <div
             className="rounded-lg overflow-hidden relative w-full"
@@ -33,7 +33,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
         </Link>
       </figure>
 
-      <div className="card-body px-4  pb-4 flex gap-3">
+      <div className="card-body px-3  pb-3 flex gap-3">
 
         <Link href={`/profile/${uploader?._id}`}>
           {uploader?.avatar ?
@@ -55,7 +55,7 @@ export default function VideoComponent({ video }: { video: IVideo }) {
      
         <div className="flex-1">
           <Link href={`/video/${video._id}`}>
-            <h2 className="text-base font-semibold text-gray-900 hover:opacity-80">
+            <h2 className="text-base font-semibold text-gray-900 hover:opacity-80 line-clamp-1">
               {video.title}
             </h2>
           </Link>

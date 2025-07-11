@@ -2,9 +2,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client'; 
 import { IVideo } from '@/models/Video';
+import { Tag } from '@/app/page';
 
-const fetchVideos = async (search = ""): Promise<IVideo[]> => {
-  const res = await apiClient.getVideos(search);
+const fetchVideos = async (search = "", tag: Tag): Promise<IVideo[]> => {
+  const res = await apiClient.getVideos(search, tag);
   return res.videos;
 };
 
@@ -18,10 +19,10 @@ const fetchRelatedVideos = async (id: string): Promise<IVideo[]> => {
   return res.relatedVideos;
 };
 
-export const useVideos = (search: string) =>
+export const useVideos = (search: string, tag: Tag) =>
   useQuery<IVideo[]>({
-    queryKey: ['videos', search],
-    queryFn: () => fetchVideos(search),
+    queryKey: ['videos', search, tag],
+    queryFn: () => fetchVideos(search, tag),
     staleTime: 1000 * 60 * 5,
     enabled: true,
   });

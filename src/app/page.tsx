@@ -9,13 +9,18 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+const tags = ['All', 'Music', 'Gaming', 'Comedy', 'Educational', 'Sports', 'Tech'] as const;
+export type Tag = (typeof tags)[number] | undefined;
+
 export default function Home() {
   const videos = useSelector((state: RootState) => state.videos?.videos);
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 1000);
+  const [selectedTag, setSelectedTag] = useState<Tag>("All");
+  const debouncedSearch = useDebounce(search, 800);
 
-  const { data, isLoading, isError } = useVideos(debouncedSearch);
+  const tag = selectedTag?.toLowerCase() === "all" ? undefined : selectedTag;
+  const { data, isLoading, isError } = useVideos(debouncedSearch, tag);
 
   useEffect(() => {
     if (data) {
@@ -80,10 +85,12 @@ export default function Home() {
 
           {/* Filter Tags */}
           <div className="flex flex-wrap justify-center gap-3 mb-8 animate-fade-in delay-700">
-            {['Trending', 'Music', 'Gaming', 'Comedy', 'Educational', 'Sports', 'Tech'].map((tag, index) => (
+            {tags.map((tag, index) => (
               <button
                 key={tag}
-                className="px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 hover:scale-105 transition-all duration-300 animate-fade-in"
+                disabled={isLoading}
+                onClick={() => setSelectedTag(selectedTag === tag ? "All" : tag)}
+                className={`${selectedTag == tag ? 'bg-purple-500 hover:bg-purple-600 text-white' : 'bg-white/10 text-gray-300 hover:bg-white/20'} px-6 py-2 backdrop-blur-sm border border-white/20 rounded-full text-sm font-medium hover:scale-105 transition-all duration-300 animate-fade-in`}
                 style={{ animationDelay: `${800 + index * 100}ms` }}
               >
                 {tag}

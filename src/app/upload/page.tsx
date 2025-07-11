@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiClient } from "@/lib/api-client";
 import { useSession } from "next-auth/react";
 import FileUpload from "@/components/Video/FileUpload";
+import DescriptionInput from "@/components/UI/DescriptionInput";
 
 export default function UploadPage() {
   const { data: session } = useSession();
@@ -157,20 +158,12 @@ export default function UploadPage() {
             </div>
 
             {/* Description */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                Description *
-              </label>
-              <textarea
-                id="description"
-                placeholder="Describe your video..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-                rows={4}
-                className="w-full px-4 py-3  border bg-gray-50 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder-gray-400 resize-vertical"
-              />
-            </div>
+            <DescriptionInput
+              title={title}
+              tags={tags}
+              description={description}
+              setDescription={setDescription}
+            />
 
             {/* Submit Button */}
             <button
